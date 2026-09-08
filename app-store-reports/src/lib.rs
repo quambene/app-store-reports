@@ -10,6 +10,7 @@
 //!     vendor_number: "12345678".to_string(),
 //!     region: "US".parse()?,
 //!     period: "2025-01".parse()?,
+//!     detailed: false,
 //! };
 //! match client.fetch_report(&request) {
 //!     Ok(gzip_bytes) => {

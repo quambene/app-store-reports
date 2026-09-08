@@ -28,20 +28,34 @@ fn try_main() -> anyhow::Result<ExitCode> {
     let decompress = args.decompress_enabled();
 
     let (mut downloaded, mut skipped, mut failed) = (0u32, 0u32, 0u32);
+    let regions = args.effective_regions();
+    // The detailed report's Transaction Date/Settlement Date columns already
+    // give the exact date per row, so the ~3-month reportDate/sales-period
+    // shift (only observed for the aggregated FINANCIAL report) isn't applied
+    // to its filename label.
+    let label_period = |period: app_store_reports::Period| {
+        if args.detailed {
+            period
+        } else {
+            period.approx_sales_period()
+        }
+    };
 
     for period in periods {
-        for region in &args.regions {
+        for region in &regions {
             let request = app_store_reports::FinanceReportRequest {
                 vendor_number: args.vendor_number.clone(),
                 region: region.clone(),
                 period,
+                detailed: args.detailed,
             };
             match client.fetch_report(&request) {
                 Ok(raw) => {
                     let (gz_path, txt_path) = output::output_paths(
                         &args.output_dir,
-                        period.approx_sales_period(),
+                        label_period(period),
                         region,
+                        args.detailed,
                     );
                     std::fs::write(&gz_path, &raw)?;
                     println!("saved  {}", gz_path.display());

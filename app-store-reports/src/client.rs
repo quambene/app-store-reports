@@ -12,6 +12,12 @@ pub struct FinanceReportRequest {
     pub vendor_number: String,
     pub region: RegionCode,
     pub period: Period,
+    /// Fetch Apple's transaction-level "All Countries or Regions (Detailed)"
+    /// report (`reportType=FINANCE_DETAIL`) instead of the aggregated
+    /// per-region report (`reportType=FINANCIAL`). The detailed report only
+    /// exists under Apple's special `Z1` "all regions" region code, so
+    /// `region` should be `Z1` when this is set.
+    pub detailed: bool,
 }
 
 /// Wraps a reused HTTP client and a set of credentials.
@@ -33,13 +39,18 @@ impl Client {
     /// every region has activity every month).
     pub fn fetch_report(&self, request: &FinanceReportRequest) -> Result<Vec<u8>, Error> {
         let token = self.credentials.generate_token()?;
+        let report_type = if request.detailed {
+            "FINANCE_DETAIL"
+        } else {
+            "FINANCIAL"
+        };
         let response = self
             .http
             .get(BASE_URL)
             .bearer_auth(token)
             .header(reqwest::header::ACCEPT, "application/a-gzip")
             .query(&[
-                ("filter[reportType]", "FINANCIAL"),
+                ("filter[reportType]", report_type),
                 ("filter[regionCode]", request.region.as_ref()),
                 ("filter[reportDate]", request.period.to_string().as_str()),
                 ("filter[vendorNumber]", request.vendor_number.as_str()),

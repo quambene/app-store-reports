@@ -18,8 +18,17 @@ pub struct Args {
     pub end: Option<Period>,
 
     /// Comma-separated Apple financial report region codes, e.g. US,EU,JP,WW,CA.
-    #[arg(long, required = true, value_delimiter = ',')]
+    /// Must be omitted when --detailed is set.
+    #[arg(long, value_delimiter = ',', required_unless_present = "detailed")]
     pub regions: Vec<RegionCode>,
+
+    /// Fetch Apple's transaction-level "All Countries or Regions (Detailed)"
+    /// report instead of the aggregated per-region report. Each row is one
+    /// individual transaction with exact Transaction Date/Settlement Date
+    /// columns. Covers all regions in a single request under Apple's special
+    /// Z1 region code, so --regions must be omitted.
+    #[arg(long, action = clap::ArgAction::SetTrue, conflicts_with = "regions")]
+    pub detailed: bool,
 
     /// Your Apple vendor number.
     #[arg(long, env = "VENDOR_NUMBER")]
@@ -53,6 +62,16 @@ impl Args {
 
     pub fn end_or_start(&self) -> Period {
         self.end.unwrap_or(self.start)
+    }
+
+    /// Regions to actually request: `Z1` (Apple's "all regions" code) when
+    /// `--detailed` is set, otherwise `--regions` as given.
+    pub fn effective_regions(&self) -> Vec<RegionCode> {
+        if self.detailed {
+            vec!["Z1".parse().expect("\"Z1\" is a valid RegionCode")]
+        } else {
+            self.regions.clone()
+        }
     }
 }
 
@@ -136,5 +155,41 @@ mod tests {
         flags.push("2025-03");
         let args = parse(&flags).unwrap();
         assert_eq!(args.end_or_start(), "2025-03".parse::<Period>().unwrap());
+    }
+
+    #[test]
+    fn detailed_flag_makes_regions_optional() {
+        let flags: Vec<&str> = vec![
+            "--start",
+            "2025-01",
+            "--detailed",
+            "--vendor-number",
+            "123",
+            "--issuer-id",
+            "issuer",
+            "--key-id",
+            "key",
+            "--key-path",
+            "key.p8",
+        ];
+        let args = parse(&flags).unwrap();
+        assert!(args.detailed);
+        assert_eq!(
+            args.effective_regions(),
+            vec!["Z1".parse::<RegionCode>().unwrap()]
+        );
+    }
+
+    #[test]
+    fn detailed_conflicts_with_regions() {
+        let mut flags = required_flags();
+        flags.push("--detailed");
+        assert!(parse(&flags).is_err());
+    }
+
+    #[test]
+    fn without_detailed_effective_regions_matches_regions() {
+        let args = parse(&required_flags()).unwrap();
+        assert_eq!(args.effective_regions(), args.regions);
     }
 }
