@@ -2,6 +2,9 @@
 /target
 config.toml
 
+# Downloaded reports
+/reports/
+
 # Environment
 **/.env
 
