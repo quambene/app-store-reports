@@ -1,0 +1,20 @@
+[package]
+name = "app-store-reports-cli"
+description = "CLI for downloading App Store Connect Sales and Finance reports"
+version.workspace = true
+authors.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+homepage.workspace = true
+repository.workspace = true
+
+[[bin]]
+name = "app-store-reports"
+path = "src/main.rs"
+
+[dependencies]
+app-store-reports = { workspace = true }
+anyhow = { workspace = true }
+clap = { workspace = true }
+dotenvy = { workspace = true }
