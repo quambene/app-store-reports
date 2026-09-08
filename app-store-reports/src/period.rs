@@ -38,6 +38,20 @@ impl Period {
         }
     }
 
+    /// Apple's `reportDate` filter labels a report by its fiscal settlement
+    /// period, which lags the actual sales dates inside the report by
+    /// roughly 3 calendar months (observed empirically; Apple does not
+    /// document the mapping). This approximates the real sales month for
+    /// display purposes — it is not exact, since Apple's fiscal periods
+    /// follow a 4-4-5 week calendar rather than calendar months.
+    pub fn approx_sales_period(self) -> Self {
+        let total_months = self.year as i32 * 12 + (self.month as i32 - 1) - 3;
+        Self {
+            year: (total_months.div_euclid(12)) as u16,
+            month: (total_months.rem_euclid(12) + 1) as u8,
+        }
+    }
+
     /// Builds the inclusive range `self..=end`, iterating month by month.
     ///
     /// Errors with [`Error::InvalidRange`] if `end` is before `self`.
@@ -164,6 +178,26 @@ mod tests {
         let period = Period::new(2025, 3).unwrap();
         let periods: Vec<Period> = period.inclusive_range(period).unwrap().collect();
         assert_eq!(periods, vec![period]);
+    }
+
+    #[test]
+    fn approx_sales_period_shifts_back_three_months() {
+        assert_eq!(
+            Period::new(2026, 8).unwrap().approx_sales_period(),
+            Period::new(2026, 5).unwrap()
+        );
+    }
+
+    #[test]
+    fn approx_sales_period_rolls_back_across_year_boundary() {
+        assert_eq!(
+            Period::new(2026, 1).unwrap().approx_sales_period(),
+            Period::new(2025, 10).unwrap()
+        );
+        assert_eq!(
+            Period::new(2026, 3).unwrap().approx_sales_period(),
+            Period::new(2025, 12).unwrap()
+        );
     }
 
     #[test]

@@ -38,8 +38,11 @@ fn try_main() -> anyhow::Result<ExitCode> {
             };
             match client.fetch_report(&request) {
                 Ok(raw) => {
-                    let (gz_path, txt_path) =
-                        output::output_paths(&args.output_dir, period, region);
+                    let (gz_path, txt_path) = output::output_paths(
+                        &args.output_dir,
+                        period.approx_sales_period(),
+                        region,
+                    );
                     std::fs::write(&gz_path, &raw)?;
                     println!("saved  {}", gz_path.display());
                     downloaded += 1;
