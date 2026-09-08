@@ -1,0 +1,28 @@
+[workspace]
+members = ["app-store-reports", "app-store-reports-cli"]
+resolver = "3"
+
+[workspace.package]
+authors = ["quambene <contact.quambene@gmail.com>"]
+edition = "2024"
+rust-version = "1.85.0"
+version = "0.1.0"
+license = "Apache-2.0"
+readme = "README.md"
+homepage = "https://github.com/quambene/app-store-reports"
+repository = "https://github.com/quambene/app-store-reports"
+
+[workspace.dependencies]
+app-store-reports = { version = "0.1.0", path = "app-store-reports" }
+thiserror = "2"
+anyhow = "1"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+reqwest = { version = "0.12", default-features = false, features = [
+    "blocking",
+    "rustls-tls",
+] }
+jsonwebtoken = "9"
+flate2 = "1"
+clap = { version = "4", features = ["derive", "env"] }
+dotenvy = "0.15"
