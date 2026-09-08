@@ -1,0 +1,19 @@
+# Rust
+/target
+config.toml
+
+# Environment
+**/.env
+
+# Keys
+**/*.jks
+**/*.p8
+**/*.pem
+**/*.pfx
+
+# AI assistant
+.claude
+.github/copilot-instructions.md
+
+# VS Code
+.vscode
