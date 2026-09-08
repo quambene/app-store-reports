@@ -1,0 +1,26 @@
+[package]
+name = "app-store-reports"
+description = "Download App Store Connect Sales and Finance reports"
+version.workspace = true
+authors.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+readme.workspace = true
+homepage.workspace = true
+repository.workspace = true
+documentation = "https://docs.rs/app-store-reports"
+keywords = ["apple", "app-store-connect", "finance", "reports"]
+categories = ["api-bindings", "finance"]
+
+[lib]
+path = "src/lib.rs"
+name = "app_store_reports"
+
+[dependencies]
+thiserror = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+reqwest = { workspace = true }
+jsonwebtoken = { workspace = true }
+flate2 = { workspace = true }
