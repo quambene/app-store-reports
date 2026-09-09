@@ -10,7 +10,7 @@ financial reports, so you don't have to click through App Store Connect once per
 
 - [Requirements](#requirements)
 - [Install CLI](#install-cli)
-- [CLI Usage](#cli-usage)
+- [CLI usage](#cli-usage)
 - [Library usage](#library-usage)
 
 ## Requirements
@@ -33,7 +33,7 @@ cd app-store-reports
 cargo install --path ./app-store-reports-cli
 ```
 
-## CLI Usage
+## CLI usage
 
 ```sh
 # Single month, one region
