@@ -35,13 +35,13 @@ cargo install --path ./app-store-reports-cli
 
 ```sh
 # Single month, one region
-app-store-reports -- --start 2026-01 --regions US
+app-store-reports --start 2026-01 --regions US
 
 # Range of months, multiple regions
-app-store-reports -- --start 2025-01 --end 2025-12 --regions US,EU,JP,WW,CA
+app-store-reports --start 2025-01 --end 2025-12 --regions US,EU,JP,WW,CA
 
 # Detailed report including all regions
-app-store-reports -- --start 2025-01 --end 2025-12 --detailed
+app-store-reports --start 2025-01 --end 2025-12 --detailed
 ```
 
 Reports are saved to `./reports/` (override with `--output-dir`) as both the raw
