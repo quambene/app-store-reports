@@ -13,10 +13,10 @@ financial reports, so you don't have to click through App Store Connect once per
 
 ## Requirements
 
-1. In App Store Connect, go to **Users and Access > Integrations > App Store Connect API** and
-   create an API key with the **Finance** (or Admin) role. Download the `.p8` private key file
-   (Apple only lets you download it once) and note the **Issuer ID** and **Key ID**.
-2. Find your **vendor number** on the [Payments and Financial Reports](https://appstoreconnect.apple.com/trends)
+1. In App Store Connect, go to "Users and Access > Integrations > App Store Connect API" and
+   create an API key with the "Finance" (or Admin) role. Download the `.p8` private key file
+   (Apple only lets you download it once) and note the Issuer ID and Key ID.
+2. Find your vendor number on the [Payments and Financial Reports](https://appstoreconnect.apple.com/trends)
    page in App Store Connect.
 3. Create `.env` with `ISSUER_ID`, `KEY_ID`, `PRIVATE_KEY_PATH` (path to the
    `.p8` file), and `VENDOR_NUMBER`.
