@@ -6,6 +6,8 @@ financial reports, so you don't have to click through App Store Connect once per
 - `app-store-reports`: the library. Handles JWT auth, the `financeReports` request, and gzip decompression.
 - `app-store-reports-cli`: a CLI (binary name `app-store-reports`) built on top of the library.
 
+---
+
 - [Requirements](#requirements)
 - [Install CLI](#install-cli)
 - [CLI Usage](#cli-usage)
