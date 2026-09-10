@@ -1,8 +1,8 @@
 # App Store Reports
 
-A Rust library and CLI for downloading App Store Connect [Sales and
+A Rust library and CLI for downloading [Sales and
 Finance](https://developer.apple.com/documentation/appstoreconnectapi/sales-and-finance)
-reports, so you don't have to click through App Store Connect once per month.
+reports from Apple, so you don't have to click through App Store Connect once per month.
 
 - `app-store-reports`: the library. Handles JWT auth, the `financeReports` request, and gzip decompression.
 - `app-store-reports-cli`: a CLI (binary name `app-store-reports`) built on top of the library.
